@@ -14,16 +14,14 @@ export const saveExecution = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new ConvexError("Not authenticated");
 
-    // check pro status
+    // Retrieve user information
     const user = await ctx.db
       .query("users")
       .withIndex("by_user_id")
       .filter((q) => q.eq(q.field("userId"), identity.subject))
       .first();
 
-    if (!user?.isPro && args.language !== "javascript") {
-      throw new ConvexError("Pro subscription required to use this language");
-    }
+    // Removed logic restricting language execution for non-Pro users
 
     await ctx.db.insert("codeExecutions", {
       ...args,

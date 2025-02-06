@@ -1,82 +1,86 @@
-import HeaderProfileBtn from "@/app/(root)/_components/HeaderProfileBtn";
-import { SignedOut } from "@clerk/nextjs";
-import { Blocks, Code2, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server"
+import { ConvexHttpClient } from "convex/browser"
+import Link from "next/link"
+import { Blocks, Code2, Sparkles, Activity, CodeSquare, Menu } from "lucide-react"
+import { SignedIn } from "@clerk/nextjs"
+import HeaderProfileBtn from "@/app/(root)/_components/HeaderProfileBtn"
 
-function NavigationHeader() {
+function Header() {
   return (
-    <div className="sticky top-0 z-50 w-full border-b border-gray-800/50 bg-gray-950/80 backdrop-blur-xl backdrop-saturate-150">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="relative h-16 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group relative">
-              {/* logo hover effect */}
-              <div
-                className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg opacity-0 
-              group-hover:opacity-100 transition-all duration-500 blur-xl"
-              />
+    <div className="relative z-[100]">
+      <div className="flex items-center justify-between max-w-7xl mx-auto bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-lg p-4 lg:px-6 mb-4 rounded-2xl border border-slate-700 shadow-2xl shadow-slate-800/30">
+        {/* Mobile menu button */}
+        <button className="lg:hidden p-2 hover:bg-slate-700/30 rounded-lg transition-colors duration-200">
+          <Menu className="w-5 h-5 text-slate-400" />
+        </button>
 
-              {/* Logo */}
-              <div className="relative bg-gradient-to-br from-[#1a1a2e] to-[#0a0a0f] p-2 rounded-xl ring-1 ring-white/10 group-hover:ring-white/20 transition-all">
-                <Blocks className="w-6 h-6 text-blue-400 transform -rotate-6 group-hover:rotate-0 transition-transform duration-500" />
-              </div>
+        {/* Left section with logo and navigation */}
+        <div className="hidden lg:flex items-center gap-12 2xl:gap-16">
+          <Link href="/" className="flex items-center gap-3 group relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-700 blur-md shadow-lg" />
+            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 p-2 rounded-xl ring-1 ring-white/10 group-hover:ring-blue-400/50 transition-all duration-300">
+              <Blocks className="w-6 h-6 text-blue-400 transform -rotate-6 group-hover:rotate-0 transition-transform duration-500" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text tracking-tight animate-pulse">
+              CodeCraft
+            </span>
+          </Link>
+       
+        </div>
 
-              <div className="relative">
-                <span
-                  className="block text-lg font-semibold bg-gradient-to-r
-                 from-blue-400 via-blue-300 to-purple-400 text-transparent bg-clip-text"
-                >
-                  CodeCraft
-                </span>
-                <span className="block text-xs text-blue-400/60 font-medium">
-                  Interactive Code Editor
-                </span>
-              </div>
-            </Link>
+        {/* Right section with actions */}
+        <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+          {/* Activity button */}
+          <Link
+            href="/profile"
+            className="group flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl
+              bg-slate-800/30 hover:bg-slate-700/30
+              border border-slate-700/50 hover:border-blue-400/50
+              transition-all duration-300  text-sm font-medium 
+              text-slate-300 group-hover:text-blue-300"
+          >
+            <Activity className="w-4 h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
+            Activity
+          </Link>
 
-            {/* snippets Link */}
-            <Link
-              href="/snippets"
-              className="relative group flex items-center gap-2 px-4 py-1.5 rounded-lg text-gray-300 bg-gray-800/50 hover:bg-blue-500/10 
-              border border-gray-800 hover:border-blue-500/50 transition-all duration-300 shadow-lg overflow-hidden"
-            >
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-blue-500/10 
-              to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
-              />
-              <Code2 className="w-4 h-4 relative z-10 group-hover:rotate-3 transition-transform" />
-              <span className="text-sm font-medium relative z-10 group-hover:text-white transition-colors">
-                Snippets
-              </span>
-            </Link>
-          </div>
+          {/* Code Editor button with distinct styling */}
+          <Link
+            href="/snippets"
+            className="relative group flex items-center gap-2.5 px-5 py-2 rounded-xl 
+              bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600
+              border-2 border-purple-500 hover:border-purple-600 transition-all duration-300
+              shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-600/30
+              transform hover:scale-[1.01] active:scale-95 box-shadow
+            "
+          >
+            <CodeSquare className="w-5 h-5 text-white group-hover:text-purple-300 transition-colors" />
+            <span className="text-sm font-semibold text-white group-hover:text-purple-200 transition-colors">
+              Code Editor
+            </span>
+          </Link>
 
-          {/* right rection */}
-          <div className="flex items-center gap-4">
-            <SignedOut>
-              <Link
-                href="/pricing"
-                className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-amber-500/20
-                 hover:border-amber-500/40 bg-gradient-to-r from-amber-500/10 
-                to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 transition-all 
-                duration-300"
-              >
-                <Sparkles className="w-4 h-4 text-amber-400 hover:text-amber-300" />
-                <span className="text-sm font-medium text-amber-400/90 hover:text-amber-300">
-                  Pro
-                </span>
-              </Link>
-            </SignedOut>
+          {/* Snippets button */}
+          <Link
+            href="/snippets"
+            className="group flex items-center gap-2.5 px-5 py-2 rounded-xl 
+              bg-slate-800/30 hover:bg-slate-700/30
+              border border-slate-700/50 hover:border-blue-400/50 
+              transition-all duration-300  text-sm font-medium 
+              text-slate-300 group-hover:text-blue-300"
+          >
+            <Code2 className="w-4 h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
+            Snippets
+          </Link>
 
-            {/* profile button */}
+          {/* Profile button */}
+          <div className="border-l border-slate-800 pl-4">
             <HeaderProfileBtn />
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default NavigationHeader;
+export default Header
+

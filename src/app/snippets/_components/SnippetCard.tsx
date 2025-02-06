@@ -1,4 +1,5 @@
 "use client";
+
 import { Snippet } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
@@ -39,9 +40,10 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
     >
       <Link href={`/snippets/${snippet._id}`} className="h-full block">
         <div
-          className="relative h-full bg-[#1e1e2e]/80 backdrop-blur-sm rounded-xl 
-          border border-[#313244]/50 hover:border-[#313244] 
-          transition-all duration-300 overflow-hidden"
+          className="relative h-full bg-[#112240] backdrop-blur-md rounded-xl 
+            border border-[#3E63DD] hover:border-[#64FFDA]
+            transition-all duration-300 hover:bg-[#1D3355] active:bg-[#1E405F]
+            hover:shadow-xl hover:shadow-cyan-800/30 active:shadow-2xl active:shadow-cyan-800/40"
         >
           <div className="p-6">
             {/* Header */}
@@ -49,13 +51,13 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-20 
-                  group-hover:opacity-30 transition-all duration-500"
-                    area-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-lg blur opacity-20 
+                      group-hover:opacity-40 transition-all duration-500"
+                    aria-hidden="true"
                   />
                   <div
-                    className="relative p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 group-hover:from-blue-500/20
-                   group-hover:to-purple-500/20 transition-all duration-500"
+                    className="relative p-2 rounded-lg bg-gradient-to-br from-cyan-600/10 to-blue-600/10 group-hover:from-cyan-600/20
+                      group-hover:to-blue-600/20 transition-all duration-500"
                   >
                     <Image
                       src={`/${snippet.language}.png`}
@@ -67,10 +69,10 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <span className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium">
+                  <span className="px-3 py-1 bg-cyan-600/20 text-cyan-300 rounded-lg text-xs font-medium">
                     {snippet.language}
                   </span>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-gray-300">
                     <Clock className="size-3" />
                     {new Date(snippet._creationTime).toLocaleDateString()}
                   </div>
@@ -81,24 +83,23 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
                 onClick={(e) => e.preventDefault()}
               >
                 <StarButton snippetId={snippet._id} />
-
                 {user?.id === snippet.userId && (
                   <div className="z-10" onClick={(e) => e.preventDefault()}>
                     <button
                       onClick={handleDelete}
                       disabled={isDeleting}
                       className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200
-                                  ${
-                                    isDeleting
-                                      ? "bg-red-500/20 text-red-400 cursor-not-allowed"
-                                      : "bg-gray-500/10 text-gray-400 hover:bg-red-500/10 hover:text-red-400"
-                                  }
-                                `}
+                        ${
+                          isDeleting
+                            ? "bg-red-500/20 text-red-300 cursor-not-allowed"
+                            : "bg-gray-900/20 text-gray-400 hover:bg-red-600/20 hover:text-red-300"
+                        }
+                      `}
                     >
                       {isDeleting ? (
                         <div className="size-3.5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
                       ) : (
-                        <Trash2 className="size-3.5" />
+                        <Trash2 className="size-3.5 text-red-300" />
                       )}
                     </button>
                   </div>
@@ -109,10 +110,10 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
             {/* Content */}
             <div className="space-y-4">
               <div>
-                <h2 className="text-xl font-semibold text-white mb-2 line-clamp-1 group-hover:text-blue-400 transition-colors">
+                <h2 className="text-xl font-semibold text-white mb-2 line-clamp-1 group-hover:text-cyan-300 transition-colors">
                   {snippet.title}
                 </h2>
-                <div className="flex items-center gap-3 text-sm text-gray-400">
+                <div className="flex items-center gap-3 text-sm text-gray-300">
                   <div className="flex items-center gap-2">
                     <div className="p-1 rounded-md bg-gray-800/50">
                       <User className="size-3" />
@@ -123,8 +124,8 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
               </div>
 
               <div className="relative group/code">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 to-purple-500/5 rounded-lg opacity-0 group-hover/code:opacity-100 transition-all" />
-                <pre className="relative bg-black/30 rounded-lg p-4 overflow-hidden text-sm text-gray-300 font-mono line-clamp-3">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/15 to-blue-600/5 rounded-lg opacity-0 group-hover/code:opacity-100 transition-all" />
+                <pre className="relative bg-gray-900/50 rounded-lg p-4 overflow-hidden text-sm text-gray-200 font-mono line-clamp-3">
                   {snippet.code}
                 </pre>
               </div>
@@ -135,4 +136,5 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
     </motion.div>
   );
 }
+
 export default SnippetCard;
